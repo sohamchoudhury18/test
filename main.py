@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from starlette.responses import HTMLResponse
-
+from starlette.responses import JSONResponse
+from sql_app import database as db
+from sql_app import models as models
+from sql_app import crud
+from fastapi.encoders import jsonable_encoder
 
 
 app = FastAPI()
@@ -15,9 +19,8 @@ html = '''
 
     <h1> you made it here </h1>
     <form action="/read"  method="get" target="_self">
-        PINCODE here : <input name="pin" type = "number"><br>
-        PLACE here : <input name="place" type = "text"><br>
-        PHONE here : <input name="phone" type = "number"><br>
+        longitude here : <input name="longitude" type = "decimal"><br>
+        latitude here : <input name="latitude" type = "decimal"><br>
         <input type="submit" value="submit info">
     </form>
 </body>
@@ -32,7 +35,14 @@ async def root():
 async def root():
     return HTMLResponse(html)
 
-@app.get("/read")
-async def ss(pin: int = 0,place: str = None , phone: int = None):
-    print("we are here")
-    return {"PINCODE":pin,"place": place,"phone":phone}
+@app.get("/get_location")
+async def get_location(latitude: float = 0.0,longitude: float = 0.0):
+    print("you are here!")
+    data = crud.get_info(latitude=latitude ,longitude= longitude)
+    print(data)
+    json_data = jsonable_encoder(data)
+    print(json_data)
+    return JSONResponse(content=json_data)
+
+
+# get_location(latitude=77.1667,longitude=28.7556)
