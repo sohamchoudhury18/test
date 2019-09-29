@@ -59,9 +59,19 @@ async def root():
 async def root():
     return HTMLResponse(html)
 
+
+@app.get("/get_pin")
+async def get_pin(pin: str = None, sess: Session = Depends(get_sess)):
+    temp = crud.getby_pin(sess,pin)
+    return {"pin": temp}
+
+# @app.get_like("/get_like")
+# async def get_like(longitude: float = None , latitude: float = None , sess):
+
+
 @app.get("/get_location")
 async def get_location(latitude: float = 0.0,longitude: float = 0.0 , sess: Session = Depends(get_sess)):
-    data = crud.get_info(sess = sess, latitude=latitude ,longitude= longitude)
+    data = crud.getby_longlang(sess = sess, latitude=latitude ,longitude= longitude)
     json_data = jsonable_encoder(data)
     if(json_data !=[]):
         return JSONResponse(content=json_data)

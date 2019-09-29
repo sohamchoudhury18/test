@@ -13,3 +13,12 @@ engine = create_engine(db_url)
 conn = engine.connect()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 sess = Session(engine)
+
+
+# from sql_app import models
+#
+# res = sess.query(models.Pincode.pin).filter(models.Pincode.pin == "IN/110044").first()
+# res
+#
+# for r in res:
+#     print(r.keys())
