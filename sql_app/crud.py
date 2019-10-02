@@ -16,15 +16,18 @@ def getby_longlang(sess,longitude: float , latitude: float):
         value_list = row
         dict_value = dict(zip(key_list,value_list))
         temp_list.append(dict_value)
+    sess.close()
     return temp_list
 
 def getby_pin(sess,pin: str):
     res = sess.query(models.Pincode.pin).filter(models.Pincode.pin == pin ).first()
+    sess.close()
     return res
 
 def precision_check(sess,longitude: float , latitude: float):
     ress = sess.query(models.Pincode.pin).filter(func.trunc(models.Pincode.longitude,1) == func.trunc(longitude,1),
                                                  func.trunc(models.Pincode.latitude,1)==func.trunc(latitude,1)).first()
+    sess.close()
     return ress
 
 def create_info(sess ,pinrow: schemas.PinRow):
@@ -36,4 +39,5 @@ def create_info(sess ,pinrow: schemas.PinRow):
     sess.add(new_row)
     sess.commit()
     sess.refresh(new_row)
+    sess.close()
     return new_row
