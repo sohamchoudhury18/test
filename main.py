@@ -81,5 +81,8 @@ async def get_location(latitude: float = 0.0,longitude: float = 0.0 , sess: Sess
 
 @app.post("/post_location" , response_model = schemas.PinRow)
 async def post_location(info: schemas.PinRow,sess: Session = Depends(get_sess)):
-    # pin_data = crud
+    pin_data = crud.getby_pin(sess,info.pin)
+    longlat_data = crud.precision_check(sess,info.longitude,info.latitude)
+    if(pin_data != None or longlat_data != None):
+        raise HTTPException(status_code = 400 , detail = "DETAILS ALREADY REGISTERED PIN CODE:" + str(longlat_data))
     return crud.create_info(sess, info)

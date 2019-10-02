@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from sql_app import database as db
 from sql_app import models as models
 from sql_app import schemas as schemas
@@ -20,6 +21,11 @@ def getby_longlang(sess,longitude: float , latitude: float):
 def getby_pin(sess,pin: str):
     res = sess.query(models.Pincode.pin).filter(models.Pincode.pin == pin ).first()
     return res
+
+def precision_check(sess,longitude: float , latitude: float):
+    ress = sess.query(models.Pincode.pin).filter(func.trunc(models.Pincode.longitude,1) == func.trunc(longitude,1),
+                                                 func.trunc(models.Pincode.latitude,1)==func.trunc(latitude,1)).first()
+    return ress
 
 def create_info(sess ,pinrow: schemas.PinRow):
     new_row = models.Pincode.table(pin = pinrow.pin,

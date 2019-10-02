@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine , cast , CHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
@@ -14,11 +14,13 @@ conn = engine.connect()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 sess = Session(engine)
 
-
+#
 # from sql_app import models
+# from sqlalchemy import func
 #
-# res = sess.query(models.Pincode.pin).filter(models.Pincode.pin == "IN/110044").first()
-# res
+# ress = sess.query(models.Pincode.pin).filter(func.trunc(models.Pincode.longitude,1) == func.trunc(77.2,1),
+#                                              func.trunc(models.Pincode.latitude,1)==func.trunc(28.6,1)).first()
 #
-# for r in res:
-#     print(r.keys())
+#
+# r = crud.precision_check(sess,77.2,28.6)
+# type(r)
